@@ -12,6 +12,7 @@ app.use(morgan('dev'));
 app.use(cors());
 
 app.use('/', require('./routes'));
+app.use(require('./middlewares/errorHandler'));
 
 mongoose
 	.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
