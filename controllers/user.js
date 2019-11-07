@@ -4,8 +4,8 @@ const jwt = require('../helpers/jwt');
 
 class UserController {
 	static register(req, res, next) {
-		let { name, email, password } = req.body;
-		let userData = { name, email, password };
+		let { username, email, password } = req.body;
+		let userData = { username, email, password };
 		User.findOne({ email })
 			.then(user => {
 				if (user) {

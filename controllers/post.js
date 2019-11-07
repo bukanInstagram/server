@@ -2,7 +2,7 @@ const { Post } = require('../models');
 
 class PostController {
 	static getAllPost(req, res, next) {
-		Post.find({})
+		Post.find()
 			.populate('comments')
 			.then(posts => {
 				res.status(200).json(posts);
