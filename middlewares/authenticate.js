@@ -11,6 +11,7 @@ module.exports = (req, res, next) => {
           next()
         } else {
           let err = new Error('User is not found')
+          err.code = 404
           next(err)
         }
       })
