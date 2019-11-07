@@ -15,7 +15,8 @@ const userSchema = new Schema({
 			},
 			{
 				validator(v) {
-					models.User.findOne({ email: val }).then(user => {
+					return models.User.findOne({ email: v }).then(user => {
+						console.log(user);
 						if (user) return false;
 						else return true;
 					});
@@ -29,7 +30,7 @@ const userSchema = new Schema({
 		required: [true, 'Please input your username'],
 		validate: {
 			validator(v) {
-				models.User.findOne({ username: val }).then(user => {
+				return models.User.findOne({ username: v }).then(user => {
 					if (user) return false;
 					else return true;
 				});

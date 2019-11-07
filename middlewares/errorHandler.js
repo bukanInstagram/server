@@ -25,4 +25,6 @@ module.exports = (err, req, res, next) => {
 		code: code,
 		message
 	});
+
+	err.name && console.log(err.path);
 };

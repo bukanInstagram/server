@@ -6,46 +6,26 @@ class UserController {
 	static register(req, res, next) {
 		let { username, email, password } = req.body;
 		let userData = { username, email, password };
-		User.findOne({ email })
-			.then(user => {
-				if (user) {
-					let err = new Error('Email is already in use');
-					err.code = 400;
-					throw err;
-				} else {
-					return User.create(userData);
-				}
-			})
+		User.create(userData)
 			.then(user => {
 				res.status(201).json(user);
 			})
-			.catch(err => {
-				next(err);
-			});
+			.catch(next);
 	}
 
 	static login(req, res, next) {
-		console.log(req.body);
 		User.findOne({ email: req.body.email })
 			.then(user => {
-				if (!user) {
-					throw new Error('User is not found');
-				}
-				let isCorrect = bcrypt.compare(req.body.password, user.password);
-				if (user && isCorrect) {
+				if (user && bcrypt.compare(req.body.password, user.password)) {
 					let jwtToken = jwt.generate({ id: user._id, email: user.email });
 					res.status(200).json({
 						jwtToken
 					});
 				} else {
-					let err = new Error('Email or Password is incorrect');
-					err.code = 401;
-					next(err);
+					throw { code: 401, message: 'Email or Password is incorrect' };
 				}
 			})
-			.catch(err => {
-				next(err);
-			});
+			.catch(next);
 	}
 }
 
