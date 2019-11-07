@@ -1,7 +1,6 @@
 const Post = require('../models/Post');
 
 module.exports = (req, res, next) => {
-	console.log(req.params);
 	Post.findById(req.params.id)
 		.then(post => {
 			if (!post) {
