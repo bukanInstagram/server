@@ -12,10 +12,11 @@ app.use(morgan('dev'));
 app.use(cors());
 
 app.use('/', require('./routes'));
+app.use(require('./middlewares/errorHandler'));
 
 mongoose
 	.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => console.log('mongodb connection success'))
-	.catch(() => console.log('mongodb connection failed'));
+	.catch(err => console.log('mongodb connection failed', err));
 
 app.listen(PORT, () => console.log('app listening to port', PORT));
