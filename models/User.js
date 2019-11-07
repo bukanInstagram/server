@@ -1,21 +1,41 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, models } = require('mongoose');
 const bcrypt = require('../helpers/bcrypt');
 
 const userSchema = new Schema({
 	email: {
 		type: String,
 		required: [true, 'Please input your email'],
-		validate: {
-			validator: function(v) {
-				let emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-				return emailRegex.test(v);
+		validate: [
+			{
+				validator: function(v) {
+					let emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+					return emailRegex.test(v);
+				},
+				message: props => `${props.value} is not a valid email address`
 			},
-			message: props => `${props.value} is not a valid email address`
-		}
+			{
+				validator(v) {
+					models.User.findOne({ email: val }).then(user => {
+						if (user) return false;
+						else return true;
+					});
+				},
+				msg: 'Email already registered'
+			}
+		]
 	},
 	username: {
 		type: String,
-		required: [true, 'Please input your username']
+		required: [true, 'Please input your username'],
+		validate: {
+			validator(v) {
+				models.User.findOne({ username: val }).then(user => {
+					if (user) return false;
+					else return true;
+				});
+			},
+			msg: 'Username already taken'
+		}
 	},
 	password: {
 		type: String,
