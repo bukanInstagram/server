@@ -4,8 +4,8 @@ const jwt = require('../helpers/jwt')
 
 class UserController {
   static register(req, res, next) {
-    let { name, email, password } = req.body
-    let userData = { name, email, password }
+    let { username, email, password } = req.body
+    let userData = { username, email, password }
     User.findOne({ email })
       .then(user => {
         if (user) {
@@ -19,15 +19,15 @@ class UserController {
       .then(user => {
         res.status(201).json(user)
       })
-      .catch(err => {
-        next(err)
-      })
+      .catch(next)
   }
   static login(req, res, next) {
     User.findOne({ email: req.body.email })
       .then(user => {
         if(!user) {
-          throw new Error('User is not found')
+          let err = new Error('User is not found')
+          err.code = 404
+          next(err)
         }
         let isCorrect = bcrypt.compare(req.body.password, user.password)
         if (user && isCorrect) {
@@ -41,9 +41,7 @@ class UserController {
           next(err)
         }
       })
-      .catch(err => {
-        next(err)
-      })
+      .catch(next)
   }
 }
 
