@@ -2,7 +2,8 @@ const { Post } = require('../models');
 
 class PostController {
 	static getAllPost(req, res, next) {
-		Post.find()
+		Post.find({})
+			.populate('comments')
 			.then(posts => {
 				res.status(200).json(posts);
 			})
@@ -11,7 +12,7 @@ class PostController {
 
 	static addPost(req, res, next) {
 		Post.create({
-			author: req.payload.username,
+			UserId: req.payload.id,
 			img: req.body.img,
 			title: req.body.title,
 			desc: req.body.desc,
@@ -24,9 +25,19 @@ class PostController {
 	}
 
 	static deletePost(req, res, next) {
-		Post.findOneAndDelete({ id: req.params.id })
+		Post.findByIdAndDelete(req.params.id)
 			.then(post => {
 				res.status(204).json();
+			})
+			.catch(next);
+	}
+
+	static likePost(req, res, next) {
+		Post.findByIdAndUpdate(req.params.id, {
+			$push: { likes: req.payload.id }
+		})
+			.then(post => {
+				res.status(200).json(post);
 			})
 			.catch(next);
 	}
