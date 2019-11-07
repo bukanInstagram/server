@@ -16,6 +16,6 @@ app.use('/', require('./routes'));
 mongoose
 	.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => console.log('mongodb connection success'))
-	.catch(() => console.log('mongodb connection failed'));
+	.catch(err => console.log('mongodb connection failed', err));
 
 app.listen(PORT, () => console.log('app listening to port', PORT));
