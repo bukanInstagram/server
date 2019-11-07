@@ -25,6 +25,7 @@ class UserController {
 	}
 
 	static login(req, res, next) {
+		console.log(req.body);
 		User.findOne({ email: req.body.email })
 			.then(user => {
 				if (!user) {
