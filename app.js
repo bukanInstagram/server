@@ -14,7 +14,7 @@ app.use(cors());
 app.use('/', require('./routes'));
 
 mongoose
-	.connect(process.env.MONGODV_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+	.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => console.log('mongodb connection success'))
 	.catch(() => console.log('mongodb connection failed'));
 
