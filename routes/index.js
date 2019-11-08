@@ -1,6 +1,7 @@
 const routes = require('express').Router();
 const images = require('../helpers/images');
 
+routes.get('/checkauth');
 routes.use('/posts', require('./posts'));
 routes.use('/users', require('./users'));
 routes.use('/comments', require('./comments'));

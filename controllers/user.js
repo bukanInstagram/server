@@ -17,9 +17,10 @@ class UserController {
 		User.findOne({ email: req.body.email })
 			.then(user => {
 				if (user && bcrypt.compare(req.body.password, user.password)) {
-					let jwtToken = jwt.generate({ id: user._id, email: user.email });
+					let access_token = jwt.generate({ id: user._id, email: user.email });
 					res.status(200).json({
-						jwtToken
+						access_token,
+						user: user.username
 					});
 				} else {
 					throw { code: 401, message: 'Email or Password is incorrect' };
