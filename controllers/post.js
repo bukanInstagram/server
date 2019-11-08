@@ -4,6 +4,7 @@ class PostController {
 	static getAllPost(req, res, next) {
 		Post.find()
 			.populate('comments')
+			.populate('UserId')
 			.then(posts => {
 				res.status(200).json(posts);
 			})
@@ -33,8 +34,18 @@ class PostController {
 	}
 
 	static likePost(req, res, next) {
-		Post.findByIdAndUpdate(req.params.id, {
-			$push: { likes: req.payload.id }
+		Post.findById(req.params.id)
+		.then(data=>{
+			if(data.likes.includes(req.payload.id)){
+				next({
+					code : 400,
+					message : 'already like the post'
+				})
+			}else{
+				return Post.findByIdAndUpdate(req.params.id, {
+					$push: { likes: req.payload.id }
+				})
+			}
 		})
 			.then(post => {
 				res.status(200).json(post);
