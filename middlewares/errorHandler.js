@@ -1,7 +1,7 @@
 module.exports = (err, req, res, next) => {
 	let code;
 	let message;
-
+	console.log(err)
 	switch (err.name) {
 		case 'ValidationError':
 			code = 400;

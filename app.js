@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const PORT = process.env.PORT;
 const mongoose = require('mongoose');
+const errorHandler = require('./middlewares/errorHandler') //belum dipasang ni
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -13,6 +14,8 @@ app.use(cors());
 
 app.use('/', require('./routes'));
 app.use(require('./middlewares/errorHandler'));
+
+app.use(errorHandler)
 
 mongoose
 	.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
